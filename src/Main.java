@@ -11,13 +11,15 @@ public class Main {
 		fc.writeFile("testFile2.txt", intToByteArray(2669), 1);
 		fc.writeFile("testFil.txt", intToByteArray(2669), 1);
 		fc.createFolder("testFOlder", 1);
+		fc.writeFileToFolder("testFOlder", "testFolderFile.txt", intToByteArray(2669), 1);
+		fc.writeFileToFolder("testFOlder", "testFolderFile2.txt", intToByteArray(2669), 1);
 		fc.writeFile("testFilehosadsad2.txt", intToByteArray(2669), 1);
 		fc.writeFile("testFilesadfsadfjasdjfsadifasd2.txt", intToByteArray(2669), 1);
 		
 //		fc.printInfo();
 		fc.readFile("testFile.txt");
 		fc.readFile("testFile2.txt");
-		fc.readFile("testFilehosadsad2.txt");
+//		fc.readFile("testFilehosadsad2.txt");
 //		fc.readFile("testFile.txt");
 	}
 	
