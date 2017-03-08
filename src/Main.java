@@ -10,6 +10,7 @@ public class Main {
 		fc.writeFile("testFile.txt", intToByteArray(2015), 1);
 		fc.writeFile("testFile2.txt", intToByteArray(2669), 1);
 		fc.writeFile("testFil.txt", intToByteArray(2669), 1);
+		fc.createFolder("testFOlder", 1);
 		fc.writeFile("testFilehosadsad2.txt", intToByteArray(2669), 1);
 		fc.writeFile("testFilesadfsadfjasdjfsadifasd2.txt", intToByteArray(2669), 1);
 		
