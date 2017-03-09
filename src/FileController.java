@@ -118,6 +118,31 @@ public class FileController {
 		}
 		return dictionary.get(key);
 	}
+	
+	private int getLocFromFolderPapa(int folderKey, int key) throws IOException{
+		byte[] tempArray = new byte[4];
+		raf.seek(getLocFromPapa(folderKey));
+		raf.read(tempArray, 0, 4);
+		firstOpenPapa = byteArrayToInt(tempArray);
+		
+		byte[] papa = new byte[firstOpenPapa - 4];
+		raf.read(papa, 0, firstOpenPapa - 4);
+		Map<Integer,Integer> dictionary = new HashMap<Integer,Integer>();
+		int i =  0;
+		while(i < papa.length){
+			byte[] hashkey = new byte[4];
+			byte[] value = new byte[2];
+			hashkey[0] = papa[i];
+			hashkey[1] = papa[i + 1];
+			hashkey[2] = papa[i + 2];
+			hashkey[3] = papa[i + 3];
+			value[0] = papa[i + 4];
+			value[1] = papa[i + 5];
+			dictionary.put(byteArrayToInt(hashkey), ByteConverter.byteArrayToInt(value[0], value[1]));
+			i += 6;
+		}
+		return dictionary.get(key);
+	}
 
 	public void writeFile(String name,byte[] contents, int security){
 		String[] nameAndExtension = name.split(Pattern.quote("."));
@@ -217,12 +242,34 @@ public class FileController {
 				arraySpot++;
 			}
 			System.out.println(new String(nameBytes,"UTF-8"));
-			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	}
+	
+	public void readFileFromFolder(String folderName, String fileName){
+		try {
+			int arraySpot = 0;
+			raf.seek(getLocFromFolderPapa(folderName.hashCode(),fileName.hashCode()));
+			byte[] tempArray = new byte[4];
+			raf.read(tempArray, 0, 4);
+			int metaLength = byteArrayToInt(tempArray);
+			byte[] meta = new byte[metaLength - 4];
+			raf.read(meta,0,metaLength - 4);
+			byte[] nameLengthBytes = {meta[0],meta[1],meta[2],meta[3]};
+			int nameLength = byteArrayToInt(nameLengthBytes);
+			byte[] nameBytes = new byte[nameLength];
+			arraySpot = 4;
+			int limit = (arraySpot+(nameLength));
+			while(arraySpot < limit){
+				System.out.println((arraySpot - 4));
+				nameBytes[arraySpot - 4] = meta[arraySpot];
+				arraySpot++;
+			}
+			System.out.println(new String(nameBytes,"UTF-8"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void adjustStuffUnderPapa(){
